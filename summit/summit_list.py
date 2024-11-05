@@ -55,7 +55,8 @@ class SummitList:
 
         """
         location = self._geolocator.geocode(location_name)
-
+        if location is None:
+            return pd.DataFrame()
         filtered_df = pd.DataFrame()
 
         self._summits["Distance"] = self._summits["Coordinates"].map(
@@ -76,3 +77,11 @@ class SummitList:
 
 def load_from_file(file_path: str) -> SummitList:
     return SummitList(pd.read_csv(file_path))
+
+
+def message_from_df(df: pd.DataFrame) -> str:
+    peak_list = [
+        f'{x["Nom"]} ({x["Elevació s.n.m. en m"]}m) a {x["Distance"]:.1f} km'
+        for _, x in df.iterrows()
+    ]
+    return "\n".join(peak_list)

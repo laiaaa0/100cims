@@ -32,3 +32,12 @@ class TestSummitList(unittest.TestCase):
         self.assertEqual(response.iloc[0]["Nom"], "les Agudes")
         self.assertEqual(response.iloc[1]["Nom"], "Matagalls")
         self.assertEqual(response.iloc[2]["Nom"], "Turó de Tagamanent")
+
+    def test_get_closest_str(self):
+        summits = summit_list.load_from_file(self.test_file_path)
+        response = summits.get_closest_summits("Montseny", limit_num=3)
+
+        response_str = summit_list.message_from_df(response)
+
+        expected_response = """les Agudes (1705m) a 5.2 km\nMatagalls (1697m) a 5.6 km\nTuró de Tagamanent (1056m) a 8.3 km"""
+        self.assertEqual(response_str, expected_response)
