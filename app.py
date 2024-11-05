@@ -8,9 +8,14 @@ import os
 class Handler():
     def __init__(self):
         token = os.getenv("CIMS_BOT_TOKEN")
-        self.bot = telepot.Bot(token)
+        if not token:
+            raise Exception("Please define CIMS_BOT_TOKEN environment variable")
+        self.summits = summit_list.load_from_file(os.path.join(os.path.dirname(__file__), "test","100cims.csv"))
+        print(self.summits.size())
+        self.bot = telepot.Bot("7506903633:AAHgK3aSqraCMAaJN3DD99u1vROB34nke7c")
+        self.bot.getMe()
         self.bot.message_loop(self.handle)
-        self.summits = summit_list.load_from_file(os.path.join(os.pardir(__file__), "test","100cims.csv"))
+
 
     def command_from_text(self, text):
         args_list = text.split()
@@ -39,8 +44,9 @@ class Handler():
             MAX_DIST = 30
             location = self.rest_of_message(chat_text)
             list_summits = self.summits.get_closest_summits(location)
-            print(list_summits)
-            # TODO : Make answer
+
+            message_from_list = summit_list.message_from_df(list_summits)
+            self.bot.sendMessage(chat_id, message_from_list)
 
 
 
