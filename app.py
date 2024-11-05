@@ -14,7 +14,7 @@ class Handler:
             os.path.join(os.path.dirname(__file__), "test", "100cims.csv")
         )
         print(self.summits.size())
-        self.bot = telepot.Bot("7506903633:AAHgK3aSqraCMAaJN3DD99u1vROB34nke7c")
+        self.bot = telepot.Bot(token)
         self.bot.getMe()
         self.bot.message_loop(self.handle)
 
